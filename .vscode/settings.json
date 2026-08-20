@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^php -r \"require_once __DIR__ \\. '/capa_datos/DatabaseHelper\\.php'; \\$db = DatabaseHelper::getInstance\\(\\)->connect\\(\\); \\$sql = file_get_contents\\(__DIR__ \\. '/migracion_cu5_ids\\.sql'\\); \\$db->exec\\(\\$sql\\); echo 'Migracion aplicada'\\.PHP_EOL;\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
