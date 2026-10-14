@@ -732,6 +732,7 @@ class PClase {
         }
         echo '</select></div>';
         echo '<div class="form-group"><label>Fecha de la Clase:</label>';
+        date_default_timezone_set('America/La_Paz');
         echo '<input type="date" name="dia" required class="form-control" value="'.date('Y-m-d').'"></div>';
         echo '<div class="form-group"><label>Hora Inicio:</label>';
         echo '<input type="time" name="hora_inicio" required class="form-control" value="07:00"></div>';

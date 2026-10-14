@@ -4,6 +4,7 @@ require_once __DIR__ . '/capa_presentacion/PGrupo.php';
 require_once __DIR__ . '/capa_presentacion/PMateria.php';
 require_once __DIR__ . '/capa_presentacion/PClase.php';
 require_once __DIR__ . '/capa_presentacion/PAsistencia.php';
+require_once __DIR__ . '/capa_presentacion/PMarcarAsistencia.php';
 require_once __DIR__ . '/capa_presentacion/PEstudiante.php';
 require_once __DIR__ . '/capa_presentacion/PaGrupo.php';
 require_once __DIR__ . '/capa_presentacion/PUsuario.php';
@@ -49,7 +50,7 @@ $cardsByRole = [
         ['action' => 'registrar_clase', 'icon' => '➕', 'title' => 'Crear Clase', 'desc' => 'Registrar una clase para tus grupos']
     ],
     'estudiante' => [
-        ['action' => 'dashboard', 'icon' => '📘', 'title' => 'Mis Grupos', 'desc' => 'Vista no disponible en este build']
+        ['action' => 'marcar_asistencia_estudiante', 'icon' => '✅', 'title' => 'Mi asistencia', 'desc' => 'Marca asistencia y consulta tu historial']
     ]
 ];
 
@@ -73,7 +74,7 @@ $allowedActions = [
         'finalizar_asistencia'
     ],
     'estudiante' => [
-        'dashboard'
+        'dashboard', 'marcar_asistencia_estudiante'
     ]
 ];
 
@@ -116,6 +117,7 @@ $pGrupo = new PGrupo();
 $pMateria = new PMateria();
 $pClase = new PClase();
 $pAsistencia = new PAsistencia();
+$pMarcarAsistencia = new PMarcarAsistencia($usuarioId);
 $pEstudiante = new PEstudiante();
 $pAsignacion = new PaGrupo();
 $pUsuario = new PUsuario();
@@ -313,6 +315,10 @@ switch ($action) {
             }
             break;
     case 'dashboard':
+        if ($rol === 'estudiante') {
+            $pMarcarAsistencia->dashboard();
+            break;
+        }
         $mensajeRol = 'Seleccione una opcion del panel para continuar.';
         if ($rol === 'profesor') {
             $mensajeRol = 'Accede a tus grupos y crea clases segun tu asignacion.';
@@ -325,6 +331,18 @@ switch ($action) {
         echo '<h2>Bienvenido al sistema</h2>';
         echo '<p>' . htmlspecialchars($mensajeRol) . '</p>';
         echo '</div>';
+        break;
+
+    case 'marcar_asistencia_estudiante':
+        if ($rol !== 'estudiante') {
+            echo '<div class="alert alert-danger">No tiene permisos para acceder a esta opción.</div>';
+            break;
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $pMarcarAsistencia->marcar($_POST);
+        } else {
+            $pMarcarAsistencia->dashboard();
+        }
         break;
 
 
